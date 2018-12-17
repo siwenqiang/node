@@ -39,6 +39,26 @@
     </div>
     <script src="/node_modules/jquery/dist/jquery.js"></script>
     <script>
+        $('#signin_form').on('submit',function(e){
+            //阻止默认行为
+            e.preventDefault();
+            //获取form表单的数据
+            var data = $(this).serialize();
+            console.log(data);
+            //发送ajax请求
+            $.ajax({
+                url:'/signin',
+                data:data,
+                type:'post',
+                success:function(data){
+                    if(data.code==200){
+                        location.href = '/'
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            })
+        })
     </script>
 </body>
 
