@@ -16,3 +16,25 @@ exports.handleLogin = (email,callback)=>{
         
     })
 }
+//拿到登录注册页面的表单数据并操作数据库 注册用户 验证昵称是否存在
+exports.checknickname = (nickname,callback)=>{
+    const sql = "select * from users where nickname=?"
+    connection.query(sql,nickname,(err,data)=>{
+        if(err){
+            callback(err,null)
+        }else{
+            callback(null,data);
+        }
+    })
+}
+//向数据库中添加新用户
+exports.addUser = (body,callback)=>{
+    const sql = "insert into users set?"
+    connection.query(sql,body,(err,data)=>{
+        if(err){
+            callback(err,null)
+        }else{
+            callback(null,data);
+        }
+    })
+}

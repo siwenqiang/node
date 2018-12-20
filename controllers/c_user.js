@@ -40,3 +40,63 @@ exports.userLogin = (req,res)=>{
     })
 }
 
+//实现用户退出登录功能
+exports.handleSignout = (req,res)=>{
+    console.log(req.session.user)
+    delete req.session.user
+    res.render('signin.html')
+}
+
+//实现用户登录注册功能
+exports.handleSignup = (req,res)=>{
+    const body = req.body;
+    //检查邮箱是否存在
+    user.handleLogin(body.email,(err,data)=>{
+        if(err){
+            res.send({
+                code:500,
+                msg:'服务器出错了'
+            })
+        }
+        if(data[0]){
+            return res.send({
+                code:1,
+                msg:'邮箱存在'
+            })
+        }
+
+           //检查昵称是否存在
+        user.checknickname(body.nickname,(err,data)=>{
+            if(err){
+                res.send({
+                    code:500,
+                    msg:'服务器出错了'
+                })
+            }
+            if(data[0]){
+                return res.send({
+                    code:2,
+                    msg:'昵称存在'
+                 })
+            }
+             //邮箱和昵称都不存在时，则向数据库添加新用户
+            user.addUser(body,(err,data)=>{
+                if(err){
+                    res.send({
+                        code:500,
+                        msg:'服务器出错了'
+                    })
+                }
+                
+                    res.send({
+                        code:200,
+                        msg:'注册成功'
+                    })
+                
+            })
+        })
+    })
+ 
+   
+}
+
